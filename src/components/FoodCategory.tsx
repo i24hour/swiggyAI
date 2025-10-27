@@ -1,6 +1,9 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef } from "react";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import { v4 as uuidv4 } from "uuid";
 
 interface FoodCategoryProps {
   title: string;
@@ -17,6 +20,8 @@ const FoodCategory = ({ title, categories, showTopLabel = false, topLabel = "TOP
   const sliderRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const { addItem } = useCart();
+  const { toast } = useToast();
 
   const scroll = (direction: "left" | "right") => {
     if (sliderRef.current) {
@@ -41,6 +46,41 @@ const FoodCategory = ({ title, categories, showTopLabel = false, topLabel = "TOP
         }
       }, 300);
     }
+  };
+
+  const handleFoodClick = (category: { id: number; name: string; image: string }) => {
+    const restaurants = [
+      "Biryani Palace",
+      "Spice Garden",
+      "Food Express",
+      "Tandoori Delights",
+      "Curry House",
+      "Royal Flavors",
+      "Foodie's Corner",
+      "Taste of India"
+    ];
+    
+    const randomRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
+    const randomRating = parseFloat((Math.random() * 1.5 + 3.5).toFixed(1));
+    const randomPrice = Math.floor(Math.random() * 200) + 50;
+
+    const item = {
+      id: uuidv4(),
+      name: category.name,
+      quantity: 1,
+      price: randomPrice,
+      restaurant: {
+        name: randomRestaurant,
+        rating: randomRating
+      }
+    };
+
+    addItem(item);
+
+    toast({
+      title: "Added to cart!",
+      description: `${category.name} from ${randomRestaurant}`,
+    });
   };
 
   return (
@@ -71,12 +111,16 @@ const FoodCategory = ({ title, categories, showTopLabel = false, topLabel = "TOP
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {categories.map((category) => (
-          <div key={category.id} className="flex flex-col items-center min-w-[120px] sm:min-w-[150px]">
+          <div 
+            key={category.id} 
+            className="flex flex-col items-center min-w-[120px] sm:min-w-[150px] cursor-pointer group"
+            onClick={() => handleFoodClick(category)}
+          >
             <div className="relative">
               <img 
                 src={category.image} 
                 alt={category.name} 
-                className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
+                className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full group-hover:scale-110 transition-transform duration-300"
               />
               {showTopLabel && (
                 <div className="absolute -top-2 -right-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-xs font-medium px-2 py-1 rounded-full">
@@ -84,7 +128,7 @@ const FoodCategory = ({ title, categories, showTopLabel = false, topLabel = "TOP
                 </div>
               )}
             </div>
-            <p className="mt-2 text-gray-800 font-medium text-center">{category.name}</p>
+            <p className="mt-2 text-gray-800 font-medium text-center group-hover:text-brand-orange transition-colors">{category.name}</p>
           </div>
         ))}
       </div>

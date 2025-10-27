@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import FoodChatbot from "@/components/FoodChatbot";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import { v4 as uuidv4 } from "uuid";
 
 // Sample data for top 10 foods
 const topTenFoods = [
@@ -35,6 +38,51 @@ const topTenRestaurants = [
 ];
 
 const Top10 = () => {
+  const { addItem } = useCart();
+  const { toast } = useToast();
+
+  const handleOrderFood = (food: { id: number; name: string; image: string; buyCount: string }) => {
+    const restaurants = [
+      "Biryani Palace",
+      "Spice Garden",
+      "Food Express",
+      "Tandoori Delights",
+      "Curry House",
+      "Royal Flavors",
+      "Foodie's Corner",
+      "Taste of India"
+    ];
+    
+    const randomRestaurant = restaurants[Math.floor(Math.random() * restaurants.length)];
+    const randomRating = parseFloat((Math.random() * 1.5 + 3.5).toFixed(1));
+    const randomPrice = Math.floor(Math.random() * 300) + 100;
+
+    const item = {
+      id: uuidv4(),
+      name: food.name,
+      quantity: 1,
+      price: randomPrice,
+      restaurant: {
+        name: randomRestaurant,
+        rating: randomRating
+      }
+    };
+
+    addItem(item);
+
+    toast({
+      title: "Added to cart!",
+      description: `${food.name} from ${randomRestaurant} - ₹${randomPrice}`,
+    });
+  };
+
+  const handleOrderRestaurant = (restaurant: { id: number; name: string; image: string; orders: string }) => {
+    toast({
+      title: `Opening ${restaurant.name}`,
+      description: "Loading menu items...",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -80,7 +128,10 @@ const Top10 = () => {
                     <p className="text-gray-600 mt-1">
                       <span className="font-semibold">{food.buyCount}</span> orders this week
                     </p>
-                    <Button className="mt-3 bg-brand-orange hover:bg-brand-orange/90">
+                    <Button 
+                      onClick={() => handleOrderFood(food)}
+                      className="mt-3 bg-brand-orange hover:bg-brand-orange/90"
+                    >
                       Order Now <ArrowRight className="ml-1" size={16} />
                     </Button>
                   </div>
@@ -92,7 +143,7 @@ const Top10 = () => {
           <TabsContent value="restaurants">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {topTenRestaurants.map((restaurant) => (
-                <div key={restaurant.id} className="flex items-center gap-4 bg-white rounded-lg border p-4 hover:shadow-md transition-shadow">
+                <div key={restaurant.id} className="flex items-center gap-4 bg-white rounded-lg border p-4 hover:shadow-md transition-shadow cursor-pointer">
                   <div className="font-bold text-3xl text-brand-orange">{restaurant.id}.</div>
                   <div className="relative overflow-hidden rounded-lg w-32 h-32 flex-shrink-0">
                     <img 
@@ -106,8 +157,11 @@ const Top10 = () => {
                     <p className="text-gray-600 mt-1">
                       <span className="font-semibold">{restaurant.orders}</span> orders this week
                     </p>
-                    <Button className="mt-3 bg-brand-orange hover:bg-brand-orange/90">
-                      Order Now <ArrowRight className="ml-1" size={16} />
+                    <Button 
+                      onClick={() => handleOrderRestaurant(restaurant)}
+                      className="mt-3 bg-brand-orange hover:bg-brand-orange/90"
+                    >
+                      View Menu <ArrowRight className="ml-1" size={16} />
                     </Button>
                   </div>
                 </div>

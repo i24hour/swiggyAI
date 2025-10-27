@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface RestaurantCardProps {
   restaurant: {
@@ -16,9 +17,20 @@ interface RestaurantCardProps {
 
 const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) => {
   const { name, image, rating, deliveryTime, cuisines, location, offer } = restaurant;
+  const { toast } = useToast();
+
+  const handleRestaurantClick = () => {
+    toast({
+      title: `Opening ${name}`,
+      description: "Loading menu items...",
+    });
+  };
 
   return (
-    <div className="group flex flex-col cursor-pointer relative">
+    <div 
+      className="group flex flex-col cursor-pointer relative"
+      onClick={handleRestaurantClick}
+    >
       <div className="relative overflow-hidden rounded-lg">
         <img 
           src={image} 
@@ -33,7 +45,7 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant }) => {
       </div>
       
       <div className="mt-3">
-        <h3 className="font-bold text-gray-800 truncate">{name}</h3>
+        <h3 className="font-bold text-gray-800 truncate group-hover:text-brand-orange transition-colors">{name}</h3>
         <div className="flex items-center mt-1">
           <div className="flex items-center bg-green-700 px-1.5 py-0.5 rounded text-white">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

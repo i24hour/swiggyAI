@@ -102,16 +102,35 @@ const Index = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Top restaurant chains in Roorkee</h2>
           <div className="flex space-x-2">
-            <button className="p-2 rounded-full border bg-white hover:bg-gray-100">
+            <button 
+              className="p-2 rounded-full border bg-white hover:bg-gray-100"
+              onClick={() => {
+                const container = document.getElementById('restaurants-container');
+                if (container) {
+                  container.scrollBy({ left: -400, behavior: 'smooth' });
+                }
+              }}
+            >
               <ChevronLeft className="h-5 w-5" />
             </button>
-            <button className="p-2 rounded-full border bg-white hover:bg-gray-100">
+            <button 
+              className="p-2 rounded-full border bg-white hover:bg-gray-100"
+              onClick={() => {
+                const container = document.getElementById('restaurants-container');
+                if (container) {
+                  container.scrollBy({ left: 400, behavior: 'smooth' });
+                }
+              }}
+            >
               <ChevronRight className="h-5 w-5" />
             </button>
           </div>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div 
+          id="restaurants-container"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+        >
           {restaurants.map((restaurant) => (
             <RestaurantCard key={restaurant.id} restaurant={restaurant} />
           ))}
