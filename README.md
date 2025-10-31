@@ -20,12 +20,7 @@ An intelligent food ordering application featuring an AI chatbot with voice reco
 
 ## 🚀 Demo
 
-Check out the live demo: [SwiggyAI Live](https://your-demo-link.com)
-
-## 📸 Screenshots
-
-![Home Page](./screenshots/home.png)
-![Chatbot Interface](./screenshots/chatbot.png)
+Check out the live demo: [SwiggyAI Live](https://swiggy-ai.vercel.app)
 
 ## 🛠️ Technologies Used
 
