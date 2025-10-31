@@ -177,7 +177,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any queries or suggestions, feel free to reach out:
 
 - Create an issue on [GitHub](https://github.com/i24hour/swiggyAI/issues)
-- Email: your.email@example.com
+- Email: priyanshu85953@gmail.com
 
 ---
 
